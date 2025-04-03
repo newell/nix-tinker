@@ -1,6 +1,8 @@
-
 from manimlib import *
 import numpy as np
+
+from numpy import sin, cos, tan
+
 
 # To watch one of these scenes, run the following:
 # manimgl example_scenes.py OpeningManimExample
@@ -12,11 +14,13 @@ import numpy as np
 
 class OpeningManimExample(Scene):
     def construct(self):
-        intro_words = Text("""
+        intro_words = Text(
+            """
             The original motivation for manim was to
             better illustrate mathematical functions
             as transformations.
-        """)
+        """
+        )
         intro_words.to_edge(UP)
 
         self.play(Write(intro_words))
@@ -26,17 +30,14 @@ class OpeningManimExample(Scene):
         grid = NumberPlane((-10, 10), (-5, 5))
         matrix = [[1, 1], [0, 1]]
         linear_transform_words = VGroup(
-            Text("This is what the matrix"),
-            IntegerMatrix(matrix),
-            Text("looks like")
+            Text("This is what the matrix"), IntegerMatrix(matrix), Text("looks like")
         )
         linear_transform_words.arrange(RIGHT)
         linear_transform_words.to_edge(UP)
         linear_transform_words.set_backstroke(width=5)
 
         self.play(
-            ShowCreation(grid),
-            FadeTransform(intro_words, linear_transform_words)
+            ShowCreation(grid), FadeTransform(intro_words, linear_transform_words)
         )
         self.wait()
         self.play(grid.animate.apply_matrix(matrix), run_time=3)
@@ -48,10 +49,12 @@ class OpeningManimExample(Scene):
         moving_c_grid.prepare_for_nonlinear_transform()
         c_grid.set_stroke(BLUE_E, 1)
         c_grid.add_coordinate_labels(font_size=24)
-        complex_map_words = TexText("""
+        complex_map_words = TexText(
+            """
             Or thinking of the plane as $\\mathds{C}$,\\\\
             this is the map $z \\rightarrow z^2$
-        """)
+        """
+        )
         complex_map_words.to_corner(UR)
         complex_map_words.set_backstroke(width=5)
 
@@ -105,7 +108,7 @@ class AnimatingMethods(Scene):
                 lambda p: [
                     p[0] + 0.5 * math.sin(p[1]),
                     p[1] + 0.5 * math.sin(p[0]),
-                    p[2]
+                    p[2],
                 ]
             ),
             run_time=5,
@@ -123,9 +126,10 @@ class TextExample(Scene):
             The most important difference between Text and TexText is that\n
             you can change the font more easily, but can't use the LaTeX grammar
             """,
-            font="Arial", font_size=24,
+            font="Arial",
+            font_size=24,
             # t2c is a dict that you can choose color for different text
-            t2c={"Text": BLUE, "TexText": BLUE, "LaTeX": ORANGE}
+            t2c={"Text": BLUE, "TexText": BLUE, "LaTeX": ORANGE},
         )
         VGroup(text, difference).arrange(DOWN, buff=1)
         self.play(Write(text))
@@ -136,7 +140,7 @@ class TextExample(Scene):
             "And you can also set the font according to different words",
             font="Arial",
             t2f={"font": "Consolas", "words": "Consolas"},
-            t2c={"font": BLUE, "words": GREEN}
+            t2c={"font": BLUE, "words": GREEN},
         )
         fonts.set_width(FRAME_WIDTH - 1)
         slant = Text(
@@ -144,7 +148,7 @@ class TextExample(Scene):
             font="Consolas",
             t2s={"slant": ITALIC},
             t2w={"weight": BOLD},
-            t2c={"slant": ORANGE, "weight": RED}
+            t2c={"slant": ORANGE, "weight": RED},
         )
         VGroup(fonts, slant).arrange(DOWN, buff=0.8)
         self.play(FadeOut(text), FadeOut(difference, shift=DOWN))
@@ -180,7 +184,8 @@ class TexTransformExample(Scene):
         # rearranging an equation
         self.play(
             TransformMatchingStrings(
-                lines[0].copy(), lines[1],
+                lines[0].copy(),
+                lines[1],
                 # matched_keys specifies which substring should
                 # line up. If it's not specified, the animation
                 # will align the longest matching substrings.
@@ -195,14 +200,14 @@ class TexTransformExample(Scene):
             ),
         )
         self.wait()
-        self.play(TransformMatchingStrings(
-            lines[1].copy(), lines[2],
-            matched_keys=["A^2"]
-        ))
+        self.play(
+            TransformMatchingStrings(lines[1].copy(), lines[2], matched_keys=["A^2"])
+        )
         self.wait()
         self.play(
             TransformMatchingStrings(
-                lines[2].copy(), lines[3],
+                lines[2].copy(),
+                lines[3],
                 key_map={"2": R"\sqrt"},
                 path_arc=-30 * DEG,
             ),
@@ -236,12 +241,14 @@ class TexIndexing(Scene):
         self.wait()
         self.play(Indicate(equation[R"\pi"]))
         self.wait()
-        self.play(TransformFromCopy(
-            equation[R"e^{\pi i}"].copy().set_opacity(0.5),
-            equation["-1"],
-            path_arc=-PI / 2,
-            run_time=3
-        ))
+        self.play(
+            TransformFromCopy(
+                equation[R"e^{\pi i}"].copy().set_opacity(0.5),
+                equation["-1"],
+                path_arc=-PI / 2,
+                run_time=3,
+            )
+        )
         self.play(FadeOut(equation))
 
         # Or regular expressions
@@ -252,15 +259,19 @@ class TexIndexing(Scene):
             self.play(FlashAround(part))
         self.wait()
         self.play(FadeOut(equation))
-        
+
         # Indexing by substrings like this may not work when
         # the order in which Latex draws symbols does not match
         # the order in which they show up in the string.
         # For example, here the infinity is drawn before the sigma
         # so we don't get the desired behavior.
-        equation = Tex(R"\sum_{n = 1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}", font_size=72)
+        equation = Tex(
+            R"\sum_{n = 1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}", font_size=72
+        )
         self.play(FadeIn(equation))
-        self.play(equation[R"\infty"].animate.set_color(RED))  # Doesn't hit the infinity
+        self.play(
+            equation[R"\infty"].animate.set_color(RED)
+        )  # Doesn't hit the infinity
         self.wait()
         self.play(FadeOut(equation))
 
@@ -271,7 +282,7 @@ class TexIndexing(Scene):
             R"\sum_{n = 1}^\infty {1 \over n^2} = {\pi^2 \over 6}",
             # Explicitly mark "\infty" as a substring you might want to access
             isolate=[R"\infty"],
-            font_size=72
+            font_size=72,
         )
         self.play(FadeIn(equation))
         self.play(equation[R"\infty"].animate.set_color(RED))  # Got it!
@@ -321,10 +332,7 @@ class UpdatersExample(Scene):
             run_time=3,
         )
         self.wait()
-        self.play(
-            square.animate.set_width(2),
-            run_time=3
-        )
+        self.play(square.animate.set_width(2), run_time=3)
         self.wait()
 
         # In general, you can alway call Mobject.add_updater, and pass in
@@ -333,9 +341,7 @@ class UpdatersExample(Scene):
         # the mobject and the amount of time since the last frame.
         now = self.time
         w0 = square.get_width()
-        square.add_updater(
-            lambda m: m.set_width(w0 * math.sin(self.time - now) + w0)
-        )
+        square.add_updater(lambda m: m.set_width(w0 * math.sin(self.time - now) + w0))
         self.wait(4 * PI)
 
 
@@ -361,7 +367,7 @@ class CoordinateSystemExample(Scene):
             # of them, like this.
             y_axis_config=dict(
                 big_tick_numbers=[-2, 2],
-            )
+            ),
         )
         # Keyword arguments of add_coordinate_labels can be used to
         # configure the DecimalNumber mobjects which it creates and
@@ -472,11 +478,7 @@ class GraphExample(Scene):
 
         parabola = axes.get_graph(lambda x: 0.25 * x**2)
         parabola.set_stroke(BLUE)
-        self.play(
-            FadeOut(step_graph),
-            FadeOut(step_label),
-            ShowCreation(parabola)
-        )
+        self.play(FadeOut(step_graph), FadeOut(step_label), ShowCreation(parabola))
         self.wait()
 
         # You can use axes.input_to_graph_point, abbreviated
@@ -515,16 +517,18 @@ class TexAndNumbersExample(Scene):
         tex.next_to(axes, UP, buff=0.5)
         value = tex.make_number_changeable("4.00")
 
-
         # This will tie the right hand side of our equation to
         # the square of the radius of the circle
-        value.add_updater(lambda v: v.set_value(circle.get_radius()**2))
+        value.add_updater(lambda v: v.set_value(circle.get_radius() ** 2))
         self.add(tex)
 
-        text = Text("""
+        text = Text(
+            """
             You can manipulate numbers
             in Tex mobjects
-        """, font_size=30)
+        """,
+            font_size=30,
+        )
         text.next_to(tex, RIGHT, buff=1.5)
         arrow = Arrow(text, tex)
         self.add(text, arrow)
@@ -540,11 +544,8 @@ class TexAndNumbersExample(Scene):
         # returns a group of the results
         exponents = tex.make_number_changeable("2", replace_all=True)
         self.play(
-            LaggedStartMap(
-                FlashAround, exponents,
-                lag_ratio=0.2, buff=0.1, color=RED
-            ),
-            exponents.animate.set_color(RED)
+            LaggedStartMap(FlashAround, exponents, lag_ratio=0.2, buff=0.1, color=RED),
+            exponents.animate.set_color(RED),
         )
 
         def func(x, y):
@@ -583,8 +584,8 @@ class SurfaceExample(ThreeDScene):
 
         # day_texture = "EarthTextureMap"
         # night_texture = "NightEarthTextureMap"
-        day_texture = "/home/newell/day.jpg" #"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Whole_world_-_land_and_oceans.jpg/1280px-Whole_world_-_land_and_oceans.jpg"
-        night_texture = "/home/newell/night.jpg" #"https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/The_earth_at_night.jpg/1280px-The_earth_at_night.jpg"
+        day_texture = "/home/newell/code/nix-tinker/manimgl/day.jpg"  # "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Whole_world_-_land_and_oceans.jpg/1280px-Whole_world_-_land_and_oceans.jpg"
+        night_texture = "/home/newell/code/nix-tinker/manimgl/night.jpg"  # "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/The_earth_at_night.jpg/1280px-The_earth_at_night.jpg"
 
         surfaces = [
             TexturedSurface(surface, day_texture, night_texture)
@@ -609,17 +610,14 @@ class SurfaceExample(ThreeDScene):
         for mob in surfaces[1:]:
             mob.rotate(PI / 2)
 
-        self.play(
-            Transform(surface, surfaces[1]),
-            run_time=3
-        )
+        self.play(Transform(surface, surfaces[1]), run_time=3)
 
         self.play(
             Transform(surface, surfaces[2]),
             # Move camera frame during the transition
             self.frame.animate.increment_phi(-10 * DEG),
             self.frame.animate.increment_theta(-20 * DEG),
-            run_time=3
+            run_time=3,
         )
         # Add ambient rotation
         self.frame.add_updater(lambda m, dt: m.increment_theta(-0.1 * dt))
@@ -670,10 +668,12 @@ class InteractiveDevelopment(Scene):
         self.play(Rotate(circle, 90 * DEG))
         self.play(circle.animate.shift(2 * RIGHT).scale(0.25))
 
-        text = Text("""
+        text = Text(
+            """
             In general, using the interactive shell
             is very helpful when developing new scenes
-        """)
+        """
+        )
         self.play(Write(text))
 
         # In the interactive shell, you can just type
@@ -700,9 +700,14 @@ class ControlsExample(Scene):
         self.checkbox = Checkbox()
         self.color_picker = ColorSliders()
         self.panel = ControlPanel(
-            Text("Text", font_size=24), self.textbox, Line(),
-            Text("Show/Hide Text", font_size=24), self.checkbox, Line(),
-            Text("Color of Text", font_size=24), self.color_picker
+            Text("Text", font_size=24),
+            self.textbox,
+            Line(),
+            Text("Show/Hide Text", font_size=24),
+            self.checkbox,
+            Line(),
+            Text("Color of Text", font_size=24),
+            self.color_picker,
         )
         self.add(self.panel)
 
@@ -710,14 +715,14 @@ class ControlsExample(Scene):
         text = Text("text", font_size=96)
 
         def text_updater(old_text):
-            assert(isinstance(old_text, Text))
+            assert isinstance(old_text, Text)
             new_text = Text(self.textbox.get_value(), font_size=old_text.font_size)
             # new_text.align_data_and_family(old_text)
             new_text.move_to(old_text)
             if self.checkbox.get_value():
                 new_text.set_fill(
                     color=self.color_picker.get_picked_color(),
-                    opacity=self.color_picker.get_picked_opacity()
+                    opacity=self.color_picker.get_picked_opacity(),
                 )
             else:
                 new_text.set_opacity(0)
@@ -735,65 +740,598 @@ class ControlsExample(Scene):
 # See https://github.com/3b1b/videos for many, many more
 
 
-# class ThreeDCoordinateSystemExample(ThreeDScene):
-#     def construct(self):
-#         # Create axes
-#         axes = ThreeDAxes(
-#             x_min=-5,
-#             x_max=5,
-#             y_min=-5,
-#             y_max=5,
-#             z_min=-5,
-#             z_max=5
-#         )
-        
-#         # Add labels
-#         x_label = TextMobject("x").next_to(axes.x_axis, RIGHT)
-#         y_label = TextMobject("y").next_to(axes.y_axis, UP)
-#         z_label = TextMobject("z").next_to(axes.z_axis, OUT)
-#         labels = VGroup(x_label, y_label, z_label)
-        
-#         # Create a sphere
-#         sphere = ParametricSurface(
-#             lambda u, v: np.array([
-#                 2 * np.cos(u) * np.cos(v),
-#                 2 * np.cos(u) * np.sin(v),
-#                 2 * np.sin(u)
-#             ]),
-#             u_min=-PI/2,
-#             u_max=PI/2,
-#             v_min=0,
-#             v_max=TAU,
-#             resolution=(15, 32),
-#             checkerboard_colors=[BLUE_D, BLUE_E]
-#         )
-        
-#         # Create a point in 3D space
-#         point = Dot(point=np.array([2, 2, 2]))
-#         point.set_color(YELLOW)
-#         point_coords = TextMobject("(2, 2, 2)").next_to(point, RIGHT+UP)
-        
-#         # Set initial camera orientation
-#         self.set_camera_orientation(phi=75 * DEGREES, theta=30 * DEGREES)
-#         self.begin_ambient_camera_rotation(rate=0.2)
-        
-#         # Add objects to scene with animations
-#         self.play(ShowCreation(axes))
-#         self.play(Write(labels))
-#         self.wait()
-        
-#         self.play(ShowCreation(sphere))
-#         self.wait()
-        
-#         self.play(ShowCreation(point), Write(point_coords))
-#         self.wait(2)
-        
-#         # Camera movements
-#         self.move_camera(phi=45 * DEGREES, theta=45 * DEGREES, run_time=2)
-#         self.wait()
-        
-#         self.move_camera(phi=90 * DEGREES, theta=0 * DEGREES, run_time=2)
-#         self.wait()
-        
-#         self.stop_ambient_camera_rotation()
-#         self.wait()
+# Need a function that will take a radiant point, a curve (parametric or other),
+# then will trace the reflected points of the radiant point about the tangents to the curve.
+# First start with a circle
+
+
+class EvoluteOrthotomicCardioidExample(Scene):
+    def construct(self):
+        # Euler–Mascheroni constant (approximate)
+        gamma = 0.57721
+
+        # radiant point
+        radiant_pt = np.array([0, 0, 0])
+        radiant = Dot(radiant_pt).set_fill(YELLOW)
+        # curve
+        cardioid = ParametricCurve(
+            lambda t: np.array(
+                [
+                    2 * (1 + np.cos(t)) * np.cos(t) + gamma,
+                    2 * (1 + np.cos(t)) * np.sin(t),
+                    0,
+                ]
+            ),
+            # t_range=[0, 2 * PI, 0.01],
+            t_range=[-PI + 0.001, PI - 0.001, 0.01],
+            color="#0FF1CE",
+        )
+
+        tangent = TangentLine(cardioid, alpha=0, length=20)
+        proj_pt = tangent.get_projection(radiant_pt)
+        proj = Dot(proj_pt)
+
+        # origin = Dot(np.array([0, 0, 0])).set_fill(BLACK)
+        origin_line = Line(np.array([0, -20, 0]), np.array([0, 20, 0]))
+        critical_line = Line(np.array([0.5, -20, 0]), np.array([0.5, 20, 0]))
+        pole = Dot(np.array([1, 0, 0])).set_fill(PURPLE_E)
+        pole_line = Line(np.array([1, -20, 0]), np.array([1, 20, 0]))
+
+        # Calculate the reflected point using midpoint formula
+        refl_pt = np.array(
+            [2 * proj_pt[0] - radiant_pt[0], 2 * proj_pt[1] - radiant_pt[1], 0]
+        )
+        refl = Dot(refl_pt).set_fill(RED)
+        self.play(
+            # FadeIn(origin),
+            FadeIn(pole),
+            ShowCreation(critical_line),
+            ShowCreation(origin_line),
+            ShowCreation(pole_line),
+        )
+        self.play(ShowCreation(cardioid))
+        self.play(ShowCreation(tangent))
+        self.play(FadeIn(radiant))
+        self.play(FadeIn(proj))
+        self.play(FadeIn(refl))
+        proj_trace = TracedPath(proj.get_center_of_mass, stroke_width=5)
+        refl_trace = TracedPath(
+            refl.get_center_of_mass, stroke_width=5, stroke_color=RED
+        )
+        self.add(proj_trace, refl_trace)
+        x_tracker = ValueTracker()
+        f_always(
+            tangent.become,
+            lambda: TangentLine(
+                cardioid,
+                alpha=((x_tracker.get_value() % TAU) / TAU),
+                length=10,
+                d_alpha=1e-4,
+            ),
+        )
+        f_always(
+            proj.move_to,
+            lambda: tangent.get_projection(radiant_pt),
+        )
+        f_always(
+            refl.move_to,
+            lambda: np.array(
+                [
+                    2 * proj.get_center_of_mass()[0] - radiant_pt[0],
+                    2 * proj.get_center_of_mass()[1] - radiant_pt[1],
+                    0,
+                ]
+            ),
+        )
+        self.play(x_tracker.animate.set_value(TAU), run_time=5, rate_func=smooth)
+
+        traced_path = refl_trace.copy().clear_updaters()
+
+        # Group to store all normal lines
+        normals = VGroup()
+
+        # Generate normal lines at multiple positions
+        for alpha in np.linspace(0, 1, 200):  # 20 normal lines for smooth effect
+            normal_line = TangentLine(
+                traced_path, alpha=alpha, length=30, stroke_color=YELLOW, stroke_width=1
+            ).rotate(TAU / 4)
+            normals.add(normal_line)
+
+        self.play(
+            AnimationGroup(*[ShowCreation(normal) for normal in normals], lag_ratio=0.1)
+        )
+
+
+class SwitchedFreethNephroid(Scene):
+    def construct(self):
+        a = 2  # Scaling factor for size
+
+        # Parametric equations for the switched nephroid
+        switched_nephroid = ParametricCurve(
+            lambda t: np.array(
+                [
+                    a * (3 * np.cos(t) + np.cos(3 * t)),  # Flipped inner loops
+                    a * (3 * np.sin(t) + np.sin(3 * t)),
+                    0,
+                ]
+            ),
+            t_range=[0, TAU, 0.01],  # Full loop
+            color=BLUE,
+        )
+
+        # Animate drawing the curve
+        self.play(ShowCreation(switched_nephroid), run_time=4)
+        self.wait(2)
+
+
+class EvoluteOrthotomicCircleExample(Scene):
+    def construct(self):
+        # radiant point
+        radiant_pt = np.array([0, 2, 0])
+        radiant = Dot(radiant_pt).set_fill(YELLOW)
+        # curve
+        circle = Circle(radius=1)
+        circle.set_stroke(BLUE, 5)
+
+        tangent = TangentLine(circle, alpha=0, length=20)
+        proj_pt = tangent.get_projection(radiant_pt)
+        proj = Dot(proj_pt)
+
+        origin = Dot(np.array([0, 0, 0])).set_fill(BLACK)
+
+        # Calculate the reflected point using midpoint formula
+        refl_pt = np.array(
+            [2 * proj_pt[0] - radiant_pt[0], 2 * proj_pt[1] - radiant_pt[1], 0]
+        )
+        refl = Dot(refl_pt).set_fill(RED)
+        self.play(FadeIn(origin))
+        self.play(ShowCreation(circle))
+        self.play(ShowCreation(tangent))
+        self.play(FadeIn(radiant))
+        self.play(FadeIn(proj))
+        self.play(FadeIn(refl))
+        proj_trace = TracedPath(proj.get_center_of_mass, stroke_width=5)
+        refl_trace = TracedPath(
+            refl.get_center_of_mass, stroke_width=5, stroke_color=RED
+        )
+        self.add(proj_trace, refl_trace)
+        x_tracker = ValueTracker(0 * PI)
+        f_always(
+            tangent.become,
+            lambda: TangentLine(
+                circle,
+                alpha=((x_tracker.get_value() % (2 * PI)) / (2 * PI)),
+                length=10,
+                d_alpha=1e-3,
+            ),
+        )
+        f_always(
+            proj.move_to,
+            lambda: tangent.get_projection(radiant_pt),
+        )
+        f_always(
+            refl.move_to,
+            lambda: np.array(
+                [
+                    2 * proj.get_center_of_mass()[0] - radiant_pt[0],
+                    2 * proj.get_center_of_mass()[1] - radiant_pt[1],
+                    0,
+                ]
+            ),
+        )
+        self.play(x_tracker.animate.set_value(2 * PI), run_time=5, rate_func=smooth)
+
+        traced_path = refl_trace.copy().clear_updaters()
+
+        # Group to store all normal lines
+        normals = VGroup()
+
+        # Generate normal lines at multiple positions
+        for alpha in np.linspace(0, 1, 300):  # 20 normal lines for smooth effect
+            normal_line = TangentLine(
+                traced_path, alpha=alpha, length=30, stroke_color=YELLOW, stroke_width=1
+            ).rotate(TAU / 4)
+            normals.add(normal_line)
+
+        self.play(
+            AnimationGroup(*[ShowCreation(normal) for normal in normals], lag_ratio=0.1)
+        )
+
+
+class NormalExample(Scene):
+    def construct(self):
+        # circle_pt = Dot(np.array([1, 0, 0])).set_fill(RED)
+        circle = Circle(radius=1)
+        circle.set_stroke(BLUE, 5)
+        tangent = TangentLine(circle, alpha=0, length=20).set_stroke(RED)
+        self.play(ShowCreation(circle), run_time=2)
+        self.play(ShowCreation(tangent))
+        self.play(tangent.animate.rotate(TAU / 4))
+
+
+class TangentEnvelope(Scene):
+    def construct(self):
+        # Define the parametric function
+        def parametric_func(t):
+            return np.array([t, np.sin(t), 0])  # Example: Sinusoidal curve
+
+        # Define curve
+        curve = ParametricCurve(parametric_func, t_range=[-PI, PI, 0.01], color=BLUE)
+
+        # Animate the curve
+        self.play(ShowCreation(curve), run_time=3)
+
+        # Define parameters for tangent lines
+        num_tangents = 30
+        t_values = np.linspace(-PI, PI, num_tangents)
+
+        tangent_lines = VGroup()
+        for t in t_values:
+            # Compute point on curve
+            point = parametric_func(t)
+
+            # Compute derivative (slope)
+            dx = 1
+            dy = np.cos(t)  # Derivative of sin(t) is cos(t)
+            slope = dy / dx
+
+            # Define tangent line
+            tangent = Line(
+                start=point + np.array([-1, -slope, 0]),  # Move along tangent direction
+                end=point + np.array([1, slope, 0]),
+                color=YELLOW,
+            )
+
+            tangent_lines.add(tangent)
+
+        # Animate the creation of tangent lines sequentially
+        self.play(
+            AnimationGroup(*[ShowCreation(tan) for tan in tangent_lines], lag_ratio=0.2)
+        )
+        self.wait(2)
+
+
+class NormalEnvelope(Scene):
+    def construct(self):
+        # Define the parametric function
+        def parametric_func(t):
+            return np.array([t, np.sin(t), 0])  # Example: Sinusoidal curve
+
+        # Define curve
+        curve = ParametricCurve(parametric_func, t_range=[-PI, PI, 0.01], color=BLUE)
+
+        # Animate the curve
+        self.play(ShowCreation(curve), run_time=3)
+
+        # Define parameters for tangent lines
+        num_tangents = 30
+        t_values = np.linspace(-PI, PI, num_tangents)
+
+        tangent_lines = VGroup()
+        for t in t_values:
+            # Compute point on curve
+            point = parametric_func(t)
+
+            # Compute derivative (slope)
+            dx = 1
+            dy = np.cos(t)  # Derivative of sin(t) is cos(t)
+            slope = dy / dx
+
+            # Define tangent line
+            tangent = (
+                Line(
+                    start=point
+                    + np.array([-1, -slope, 0]),  # Move along tangent direction
+                    end=point + np.array([1, slope, 0]),
+                    color=YELLOW,
+                )
+                .rotate(TAU / 4)
+                .set_length(20)
+            )
+            tangent_lines.add(tangent)
+
+        # Animate the creation of tangent lines sequentially
+        self.play(
+            AnimationGroup(*[ShowCreation(tan) for tan in tangent_lines], lag_ratio=0.2)
+        )
+        self.wait(2)
+
+
+class PedalCurveExample(Scene):
+    def construct(self):
+        pedal_pt = np.array([0, 2, 0])
+        pedal = Dot(pedal_pt).set_fill(GREEN)
+        circle_pt = Dot(np.array([1, 0, 0])).set_fill(RED)
+        circle = Circle(radius=1)
+        circle.set_stroke(BLUE, 5)
+        tangent = TangentLine(circle, alpha=0, length=20).set_stroke(RED)
+        proj_pt = tangent.get_projection(pedal_pt)
+        self.play(ShowCreation(circle), run_time=2)
+        self.play(ShowCreation(tangent))
+
+        intersection_pt = Dot(proj_pt)
+        intersection_line = Line(pedal_pt, proj_pt).set_length(20)
+        ## NOTE: can also find line intersection point from both lines
+        # print(
+        #     line_intersection(
+        #         [tangent.start, tangent.end],
+        #         [intersection_line.start, intersection_line.end],
+        #     ),
+        #     intersection_pt.get_center(),
+        # )
+        self.play(FadeIn(circle_pt))
+        self.play(FadeIn(pedal))
+        self.play(ShowCreation(intersection_line))
+        self.play(FadeIn(intersection_pt))
+        trace = TracedPath(intersection_pt.get_center_of_mass, stroke_width=5)
+        self.add(trace)
+
+        x_tracker = ValueTracker(0 * PI)
+        f_always(
+            circle_pt.move_to, lambda: circle.point_at_angle(x_tracker.get_value())
+        )
+        f_always(
+            tangent.become,
+            lambda: TangentLine(
+                circle,
+                alpha=((x_tracker.get_value() % (2 * PI)) / (2 * PI)),
+                length=10,
+                d_alpha=1e-3,
+            ).set_stroke(RED),
+        )
+        f_always(
+            intersection_line.become,
+            lambda: Line(pedal_pt, intersection_pt.get_center()).set_length(20),
+        )
+        f_always(
+            intersection_pt.move_to,
+            lambda: tangent.get_projection(pedal_pt),
+        )
+        self.play(x_tracker.animate.set_value(2 * PI), run_time=5, rate_func=smooth)
+
+
+class CardiodExample(Scene):
+    def construct(self):
+        cardioid = ParametricCurve(
+            lambda t: np.array(
+                [
+                    # np.exp(1) * np.cos(t) * (1 - np.cos(t)),
+                    # np.exp(1) * np.sin(t) * (1 - np.cos(t)),
+                    (1 + np.cos(t)) * np.cos(t),
+                    (1 + np.cos(t)) * np.sin(t),
+                    0,
+                ]
+            ),
+            t_range=[0, 2 * PI, 0.01],
+            color="#0FF1CE",
+        )
+        self.add(cardioid)
+
+
+class Cardiod2Example(Scene):
+    def construct(self):
+        # Two circles
+        stationary_circle = Circle(radius=1).set_stroke(WHITE, 5)
+        moving_circle = Circle(radius=1).move_to(np.array([2, 0, 0]))
+        inte_pt = Dot(np.array([1, 0, 0])).set_fill(RED)
+        vg = VGroup(inte_pt, moving_circle)
+        self.add(stationary_circle, vg)
+        trace = TracedPath(inte_pt.get_center_of_mass, stroke_width=5, stroke_color=RED)
+        self.add(trace)
+        x_tracker = ValueTracker(0 * PI)
+        self.play(
+            x_tracker.animate.set_value(2 * PI), run_time=5
+        )  # , rate_func=smooth)
+
+        # pedal_pt = np.array([0, 2, 0])
+        # pedal = Dot(pedal_pt).set_fill(GREEN)
+        # circle_pt = Dot(np.array([1, 0, 0])).set_fill(RED)
+        # circle = Circle(radius=1)
+        # circle.set_stroke(BLUE, 5)
+        # tangent = TangentLine(circle, alpha=0, length=20).set_stroke(RED)
+        # self.play(ShowCreation(circle), run_time=2)
+        # self.play(ShowCreation(tangent))
+        # proj_pt = tangent.get_projection(pedal_pt)
+        # intersection_pt = Dot(proj_pt)
+        # intersection_line = Line(pedal_pt, proj_pt).set_length(20)
+        # self.play(FadeIn(circle_pt))
+        # self.play(FadeIn(pedal))
+        # self.play(ShowCreation(intersection_line))
+        # self.play(FadeIn(intersection_pt))
+        # trace = TracedPath(intersection_pt.get_center_of_mass, stroke_width=5)
+        # self.add(trace)
+
+        # x_tracker = ValueTracker(0 * PI)
+        # f_always(
+        #     circle_pt.move_to, lambda: circle.point_at_angle(x_tracker.get_value())
+        # )
+        # f_always(
+        #     tangent.become,
+        #     lambda: TangentLine(
+        #         circle,
+        #         alpha=((x_tracker.get_value() % (2 * PI)) / (2 * PI)),
+        #         length=10,
+        #         d_alpha=1e-3,
+        #     ).set_stroke(RED),
+        # )
+        # f_always(
+        #     intersection_line.become,
+        #     lambda: Line(pedal_pt, intersection_pt.get_center()).set_length(20),
+        # )
+        # f_always(
+        #     intersection_pt.move_to,
+        #     lambda: tangent.get_projection(pedal_pt),
+        # )
+        # self.play(x_tracker.animate.set_value(2 * PI), run_time=5, rate_func=smooth)
+
+
+# Varniex - CodingManim 03: Mastering the Graphs & Coordinate System
+# YouTube Video: https://youtu.be/KFsYpc_pgh4
+
+
+def get_slope_of_tangent(t, graph):
+    p0 = graph.get_function()(t)
+    p1 = graph.get_function()(t + EPSILON)
+    return tan(angle_of_vector([EPSILON, p1 - p0]))
+
+
+class RosePatternWithParametricCurve(ParametricCurve):
+    def __init__(
+        self,
+        radius: float = 2,
+        k: float = 10,
+        theta_range: float = TAU,
+        step_size: float = 0.05,
+        **kwargs,
+    ):
+        self.radius = radius
+        self.k = k
+        super().__init__(
+            t_func=lambda t: [
+                radius * cos(k * t) * cos(t),
+                radius * cos(k * t) * sin(t),
+                0,
+            ],
+            t_range=(0, theta_range + step_size, step_size),
+            **kwargs,
+        )
+
+
+class ParametricCurveExample(Scene):
+    def construct(self):
+        step_func = ParametricCurve(
+            lambda t: [t, 0 if t < 0 else 1, 0],
+            t_range=[-5, 5, 0.1],
+            discontinuities=[0],
+        )
+        self.play(ShowCreation(step_func))
+
+
+class ParametricSinCurve(Scene):
+    def construct(self):
+        sin_curve = ParametricCurve(
+            t_func=lambda t: [t, sin(t), 0], t_range=[-PI, PI, 0.1]
+        )
+        sin_curve.set_color(YELLOW)
+        self.play(ShowCreation(sin_curve))
+
+
+class GroupingObjects(Scene):
+    def construct(self):
+        circle = Circle()
+        square = Square()
+        hexagon = RegularPolygon(6)
+        star = Star(5).scale(0.7)
+
+        shapes = VMobject()
+        shapes.add(circle, square, hexagon, star)
+        shapes.scale(0.75)
+        shapes.set_stroke(WHITE)
+        shapes.set_color_by_gradient(BLUE, RED, YELLOW, PINK)
+
+        self.play(ShowCreation(shapes))
+
+        # VGroup
+        shapes_vgroup = VGroup(circle, square, hexagon, star)
+        shapes_vgroup.arrange(RIGHT, buff=2)
+        shapes_vgroup.set_stroke(YELLOW, width=8)
+
+
+class FunctionGraphExample(Scene):
+    def construct(self):
+        sin_curve = FunctionGraph(sin).set_color(BLUE)
+        cos_curve = FunctionGraph(cos).set_color(RED)
+        parabola = FunctionGraph(lambda x: x**2).set_color(YELLOW)
+        cubic = FunctionGraph(lambda x: x**3).set_color(PINK)
+        relu = FunctionGraph(lambda x: max(0, x)).set_color(TEAL)
+
+        self.play(ShowCreation(sin_curve))
+        self.play(ReplacementTransform(sin_curve, cos_curve))
+        self.play(ReplacementTransform(cos_curve, parabola))
+        self.play(ReplacementTransform(parabola, cubic))
+        self.play(ReplacementTransform(cubic, relu))
+
+
+class IntroToAxes(Scene):
+    def construct(self):
+        axes = Axes(
+            x_range=(-5, 5, 1), y_range=(-3, 3, 1), axis_config=dict(include_tip=True)
+        )
+        axes.add_coordinate_labels()
+        axes_labels = axes.get_axis_labels()
+        self.play(ShowCreation(axes), Write(axes_labels))
+
+        sin_curve = axes.get_graph(sin)
+        sin_curve.set_color(YELLOW)
+        self.play(ShowCreation(sin_curve))
+
+
+class DistanceTimeGraph(Scene):
+    def construct(self):
+        axes = Axes(
+            x_range=(0, 7, 1),
+            y_range=(0, 25, 3),
+            height=6,
+            axis_config=dict(include_tip=True),
+        )
+        axes.add_coordinate_labels()
+        axes_labels = axes.get_axis_labels("t", "x(t)")
+        self.play(ShowCreation(axes), Write(axes_labels))
+
+        dist_graph = axes.get_graph(
+            function=lambda t: t**2 if t < 3 else 6 * t - 9, x_range=(0, 5)
+        ).set_color(BLUE)
+        self.play(ShowCreation(dist_graph))
+
+        tangent = axes.get_tangent_line(2.5, dist_graph)
+        self.play(ShowCreation(tangent))
+
+        vel_graph = axes.get_graph(
+            lambda t: 2 * t if t < 3 else 6, x_range=(0, 5)
+        ).set_color(RED)
+        self.play(ShowCreation(vel_graph))
+
+        dist_label = axes.get_graph_label(dist_graph, "x(t)")
+        vel_label = axes.get_graph_label(vel_graph, "v(t)")
+        self.play(
+            Write(dist_label),
+            Write(vel_label),
+            FadeOut(axes_labels[1]),
+            FadeOut(tangent),
+        )
+
+        ## Code to sweep tangent from t = 0 to t = 5 secs
+
+        # very helpful to access dot coords at any time (t).
+        # dot coords: (time coord, slope of tangent at that time)
+        def get_dot_coords():
+            return axes.c2p(
+                t := t_coord.get_value(), get_slope_of_tangent(t, dist_graph)
+            )
+
+        # time coordinate tracker
+        t_coord = ValueTracker(0)
+        tangent = always_redraw(
+            lambda: axes.get_tangent_line(t_coord.get_value(), dist_graph, length=2)
+        )
+
+        dot = Dot(fill_color=YELLOW)
+        dot.f_always.move_to(get_dot_coords)
+
+        h_line = always_redraw(lambda: axes.get_h_line(dot.get_center()))
+        v_line = always_redraw(lambda: axes.get_v_line(dot.get_center()))
+
+        self.add(h_line, v_line)
+        self.play(ShowCreation(dot), ShowCreation(tangent))
+        self.wait()
+        self.play(
+            t_coord.animate.set_value(5),
+            run_time=5,
+            rate_func=there_and_back,
+        )
+
+        area = axes.get_area_under_graph(
+            graph=vel_graph, x_range=(2, 4), fill_color=RED  # fill_opacity=0.5
+        )
+        self.play(ShowCreation(area))
+        self.wait()

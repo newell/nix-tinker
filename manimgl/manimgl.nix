@@ -74,6 +74,8 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     validators
+
+    setuptools
   ];
 
   build-system = [
